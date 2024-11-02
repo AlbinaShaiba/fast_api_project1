@@ -1,32 +1,12 @@
-from pydantic import BaseModel
-from pydantic import PostgresDsn
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
-class RunConfig(BaseSettings):
-    host: str = "0.0.0.0"
-    port: int = 8080
+DB_HOST = os.environ.get("DB_HOST")
+DB_PORT = os.environ.get("DB_PORT")
+DB_NAME = os.environ.get("DB_NAME")
+DB_USER = os.environ.get("DB_USER")
+DB_PASS = os.environ.get("DB_PASS")
 
-class ApiPrefix(BaseModel):
-    prefix: str = "/api"
-
-class DatabaseConfig(BaseModel):
-    url: PostgresDsn
-    echo: bool = False
-    echo_pool: bool = False
-    pool_size: int = 50
-    max_overflow: int = 10
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        case_sensitive=False,
-        env_nested_delimiter="__",
-        env_prefix="APP_CONFIG__",
-    )
-    run: RunConfig = RunConfig()
-    api: ApiPrefix = ApiPrefix()
-    db: DatabaseConfig
-
-
-settings = Settings()
+SECRET_AUTH = os.environ.get("SECRET_AUTH")
