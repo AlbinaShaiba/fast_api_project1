@@ -1,4 +1,5 @@
-from sqlalchemy import Integer
+from typing import Annotated, List
+from sqlalchemy import Integer, String, ARRAY
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession, AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, declared_attr
 
@@ -10,6 +11,9 @@ DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{D
 engine = create_async_engine(DATABASE_URL)
 
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+
+uniq_str_an = Annotated[str, mapped_column(unique=True)]
+array_or_none_an = Annotated[List[str], mapped_column(ARRAY(String))]
 
 class Base(AsyncAttrs, DeclarativeBase):
     __abstract__ = True
